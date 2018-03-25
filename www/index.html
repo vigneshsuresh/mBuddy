@@ -1,0 +1,339 @@
+<html ng-app="ionicApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    
+    <title>Get the Best</title>
+    <link href="css/ionic.css" rel="stylesheet">
+    <link href="css/ionicons.min.css" rel="stylesheet">
+   <!-- <link rel="stylesheet" href="materialize/css/material.css">
+    <link rel="stylesheet" href="materialize/css/materialize.css">-->
+ 
+    <script src="js/angular.min.js"></script>
+    
+    <script src= "js/ngStorage.min.js"></script>
+        
+    <script src="js/ionic.bundle.js"></script>
+
+    <style>
+
+        .header .col {
+    background-color:grey;
+    color: white;
+}
+
+.col {
+    border: solid 1px grey;
+    border-bottom-style: none;
+    border-right-style: none;
+}
+
+.col:last-child {
+    border-right: solid 1px grey;
+}
+
+.row:last-child .col {
+    border-bottom: solid 1px grey;
+}
+    </style>
+
+  </head>
+
+  <body ng-controller="HomeTabCtrl">
+    <ion-nav-bar class="bar-positive" align-title="center"><!--Adding these unfilled tags so that when routing to another page, back button is provided-->
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+    </ion-nav-bar>
+             
+    <ion-nav-view></ion-nav-view><!-- Nav-view helps in navigating the view accordingly-->
+
+    <!--<div class="bar bar-footer bar-positive">
+  	 
+	</div>/-->
+
+    <script id="templates/tabs.html" type="text/ng-template">
+      <ion-tabs class="tabs-icon-top tabs-positive">
+
+        <ion-tab title="Home" icon="ion-home" href="#/tab/home">
+          <ion-nav-view name="home-tab"></ion-nav-view>
+        </ion-tab>
+
+        <ion-tab title="Update" icon="ion-edit" href="#/tab/about">
+          <ion-nav-view name="update-tab"></ion-nav-view>
+        </ion-tab>
+
+        <ion-tab title="Best Price" icon="ion-star" ui-sref="tabs.contact">
+          <ion-nav-view name="bestprice-tab"></ion-nav-view>
+        </ion-tab>
+
+      </ion-tabs>
+    </script>
+
+    <script id="templates/home.html" type="text/ng-template">
+      <ion-view view-title="Home">
+       
+        <ion-content class="padding">
+       <!-- <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>-->
+         <p><center>Add new Suppliers and Products, save it and check the details whenever necessary
+          <br/><br/>
+            <a class="button icon-right ion-android-arrow-forward button-positive" href="#/tab/facts">New Entry</a></center>
+          </p>
+
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/inclusion.html" type="text/ng-template">
+      <ion-view view-title="Enter Details">
+        <ion-content class="padding">
+        <form name="FormSap" novalidate>
+            <div class="item item-input-inset">
+                <label class="item-input-wrapper">
+                  <input type="text" placeholder="Supplier Name" name="sapname" ng-model="sap.name" ng-minlength="3" required>
+                </label>
+                <button class="button button-small button-positive" ng-disabled="FormSap.$invalid" ng-click="showAlertSap()">
+                  Save
+                </button>
+            </div>
+            <div class="padding">
+            <p class="assertive" ng-show="FormSap.sapname.$error.minlength">* Supplier name must have atleast 3 characters</p>
+            </div>
+            </form>
+            	<form name="FormPro" novalidate>
+	            	<div class="item item-input-inset">
+		                <label class="item-input-wrapper">
+		                  <input type="text" placeholder="Product Name" name="prodname" ng-model="prod.name" ng-minlength="3" required>
+		                </label>
+		                <button class="button button-small button-positive" ng-disabled="FormPro.$invalid" ng-click="showAlertPro()">
+		                  Save
+		                </button>
+		            </div>
+		            <div class="padding">
+			            <p class="assertive" ng-show="FormPro.prodname.$error.minlength">* Product name must have atleast 3 characters</p>
+			        </div>
+	            </form>
+           <!-- <ul class="list">
+              <div class="item item-divider">
+            SUPPLIERS
+          </div>
+          <li class="item" ng-repeat="suppliers in sap">
+            {{suppliers}}
+          </li>
+      </ul>
+      <ul class="list">
+              <div class="item item-divider">
+            PRODUCTS
+          </div>
+          <li class="item" ng-repeat="products in prod">
+            {{products}}
+          </li>
+      </ul> -->
+        </ion-content>
+      </ion-view>
+    </script>
+
+   
+
+    <script id="templates/update.html" type="text/ng-template">
+      <ion-view view-title="Fix Price and Update">
+        <ion-content class="padding">
+        	<form name="FormUpdate" novalidate>
+            <div class="list">
+              <label class="item item-input item-select">
+                <div class="input-label">
+                  Suppliers
+                </div>
+                <select ng-model="updated.sap" name="sapupdate" ng-options="suppliers for suppliers in sap" required>
+                  <!--<option ng-repeat="suppliers in sap">{{suppliers}}</option>-->
+                  <option value="" disabled>Choose</option>
+                </select>
+              </label>
+	              <div class="padding">
+	              <p class="assertive" ng-show="FormUpdate.sapupdate.$error.required">* Supplier is required</p>
+	              </div>
+            </div>
+            <div class="list">
+              <label class="item item-input item-select">
+                <div class="input-label">
+                  Select Product
+                </div>
+                <select ng-model="updated.product" name="produpdate" ng-options="products for products in prod" required>
+                  <!--<option ng-repeat="products in prod">{{products}}</option>-->
+                  <option value="" disabled>Choose</option>
+                </select>
+              </label>
+	              <div class="padding">
+	              <p class="assertive" ng-show="FormUpdate.produpdate.$error.required">* Product is required</p>
+	              </div>
+            </div>
+            <label class="item item-input">
+                <span class="input-label">Price</span>
+                <input type="number" ng-model="updated.number" name="price" min=0 required>
+            </label>
+            	<div class="padding">
+	              <p class="assertive" ng-show="FormUpdate.price.$error.required">* Price is required</p>
+	              </div>
+            <button class="button icon ion-compose button-block button-positive" ng-disabled="FormUpdate.$invalid" ng-click="updation()">Update</button>
+            </form>
+        <!--    <ul class="list">
+              <div class="item item-divider">
+            UPDATED
+          </div>
+          <li class="item" ng-repeat="updates in updated">
+            {{updates}}
+          </li>
+      </ul>-->
+
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/findbest.html" type="text/ng-template">
+      <ion-view view-title="Cheapest Product">
+        <ion-content class="padding">
+            <div class="list">
+              <label class="item item-input item-select item-positive">
+                <div class="input-label">
+                  <i class="icon ion-search"></i>&nbspSelect Product
+                </div>
+                <select ng-model="filterprod" ng-options="products for products in prod">
+                <option value="" disabled>Choose</option>
+                 <!-- <option ng-repeat="products in prod">{{products}}</option>-->
+                </select>
+              </label>
+            </div>
+            
+                      		
+          		<div class="row header" ng-show="showing">
+     				<div class="col">SUPPLIER</div>
+     				<div class="col">PRICE</div>
+           		</div>
+           		<div ng-repeat="updates in updated | filter:filterprod | orderBy:'+no'">
+          		<div class="row">
+           				<div class="col">{{updates.name}}</div>
+           				<div class="col">{{updates.no}}</div>
+           		</div>
+          		</div>            
+        </ion-content>
+      </ion-view>
+    </script>
+
+
+
+
+<script>
+    angular.module('ionicApp', ['ionic'])
+
+.config(function($stateProvider, $urlRouterProvider) {
+
+  $stateProvider
+    .state('tabs', {
+      url: "/tab",
+      abstract: true,
+      templateUrl: "templates/tabs.html"
+    })
+    .state('tabs.home', {
+      url: "/home",
+      views: {
+        'home-tab': {
+          templateUrl: "templates/home.html",
+          controller: 'HomeTabCtrl'
+        }
+      }
+    })
+    .state('tabs.facts', {
+      url: "/facts",
+      views: {
+        'home-tab': {
+          templateUrl: "templates/inclusion.html"
+        }
+      }
+    })
+    .state('tabs.about', {
+      url: "/about",
+      views: {
+        'update-tab': {
+          templateUrl: "templates/update.html"
+        }
+      }
+    })
+    .state('tabs.contact', {
+      url: "/contact",
+      views: {
+        'bestprice-tab': {
+          templateUrl: "templates/findbest.html"
+        }
+      }
+    });
+
+
+   $urlRouterProvider.otherwise("/tab/home");
+
+})
+
+.controller('HomeTabCtrl', function($scope,$ionicPopup) {
+  
+
+$scope.sap=[];
+$scope.prod=[];
+$scope.updated=[];
+
+$scope.savedsap = localStorage.getItem('sap');
+$scope.sap = (localStorage.getItem('sap')!==null) ? JSON.parse($scope.savedsap) : [ ];
+localStorage.setItem('sap', JSON.stringify($scope.sap));
+
+$scope.savedprod = localStorage.getItem('prod');
+$scope.prod = (localStorage.getItem('prod')!==null) ? JSON.parse($scope.savedprod) : [ ];
+localStorage.setItem('prod', JSON.stringify($scope.prod));
+
+
+$scope.saved = localStorage.getItem('updated');
+$scope.updated = (localStorage.getItem('updated')!==null) ? JSON.parse($scope.saved) : [ ];
+localStorage.setItem('updated', JSON.stringify($scope.updated));
+
+  //Alert after Save
+  $scope.showAlertSap = function() {
+    
+    $scope.sap.push($scope.sap.name);
+    localStorage.setItem('sap', JSON.stringify($scope.sap));
+    $scope.sap.name='';
+
+     var alertPopup = $ionicPopup.alert({
+       title: 'Saved Successfully!',
+       });
+ }
+
+
+ $scope.showAlertPro = function() {
+    $scope.prod.push($scope.prod.name);
+    localStorage.setItem('prod', JSON.stringify($scope.prod));
+    $scope.prod.name='';
+      var alertPopup = $ionicPopup.alert({
+       title: 'Saved Successfully!',
+       });
+ }
+
+
+ $scope.change=function()
+ {
+  $scope.showing=true;
+ }
+
+ //Update function
+ $scope.updation = function() {
+
+ 	$scope.updated.push({name:$scope.updated.sap,pr:$scope.updated.product,no:$scope.updated.number});
+ 	localStorage.setItem('updated', JSON.stringify($scope.updated));
+  $scope.updated.sap='';
+  $scope.updated.product='';
+  $scope.updated.number='';
+     var alertPopup = $ionicPopup.alert({
+       title: 'Updated',
+       });
+ }
+
+
+});
+</script>
+</body>
+</html>

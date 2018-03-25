@@ -1,0 +1,66 @@
+<html ng-app="ionicApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    
+    <title>Get the Best</title>
+    <link href="css/ionic.css" rel="stylesheet">
+    <link href="css/ionicons.min.css" rel="stylesheet">
+            
+    <script src="js/angualr.min.js"></script>
+        
+    <script src="js/ionic.bundle.js"></script>
+
+    <style>
+    	.box1, box2, box3 {
+   			height: 300px;
+   			border: 2px solid blue;
+		}
+       
+    </style>
+    
+  </head>
+
+  <body ng-controller="HomeTabCtrl">
+    <ion-slide-box>
+
+   <ion-slide>
+      <div class = "box box1">
+         <h1>Box 1</h1>
+      </div>
+   </ion-slide>
+
+   <ion-slide>
+      <div class = "box box2">
+         <h1>Box 2</h1>
+      </div>
+   </ion-slide>
+
+   <ion-slide>
+      <div class = "box box3">
+         <h1>Box 3</h1>
+      </div>
+   </ion-slide>
+
+</ion-slide-box>
+
+
+
+
+<script>
+    angular.module('ionicApp', ['ionic'])
+
+
+
+.controller('HomeTabCtrl', function($scope,$ionicSlideBoxDelegate) {
+  
+
+$scope.nextSlide = function() {
+      $ionicSlideBoxDelegate.next();
+   }
+
+
+});
+</script>
+</body>
+</html>
